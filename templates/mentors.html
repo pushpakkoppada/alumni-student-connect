@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Find Mentors | AlumniConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        body {
+            background: #f8f7fc;
+        }
+
+        .mentor-page {
+            padding: 50px 8%;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+        }
+
+        .page-header p {
+            color: #707889;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            width: 300px;
+            padding: 14px;
+            border: 1px solid #dddfea;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        .search-box button {
+            background: #5b35d5;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 20px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .mentor-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .mentor-box {
+            background: white;
+            border: 1px solid #e7e8ef;
+            border-radius: 20px;
+            padding: 30px;
+            transition: .25s;
+        }
+
+        .mentor-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(40, 25, 90, .1);
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eeeaff;
+            color: #5b35d5;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .verified {
+            color: #15945c;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 8px 0;
+        }
+
+        .company {
+            color: #707889;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .skill {
+            background: #f0edff;
+            color: #5b35d5;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .request-btn {
+            width: 100%;
+            padding: 13px;
+            background: #5b35d5;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #5b35d5;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .flash {
+            background: #e9f8f0;
+            color: #137347;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        @media(max-width: 900px) {
+            .mentor-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .mentor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                display: block;
+            }
+
+            .search-box {
+                margin-top: 20px;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="mentor-page">
+
+    <a href="/student-dashboard" class="back">
+        ← Back to Dashboard
+    </a>
+
+    <div class="page-header">
+
+        <div>
+
+            <p class="eyebrow">
+                ALUMNI NETWORK
+            </p>
+
+            <h1>Find Your Mentor</h1>
+
+            <p>
+                Connect with experienced alumni based on
+                skills, companies and career interests.
+            </p>
+
+        </div>
+
+
+        <form
+            class="search-box"
+            method="GET"
+            action="/mentors">
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search skills, companies..."
+            >
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+    </div>
+
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="flash">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <div class="mentor-grid">
+
+        {% for mentor in mentors %}
+
+            <div class="mentor-box">
+
+                <div class="avatar">
+
+                    {{ mentor["name"][0] }}
+
+                </div>
+
+                <div class="verified">
+                    ✓ Verified Alumni
+                </div>
+
+                <h2>
+                    {{ mentor["name"] }}
+                </h2>
+
+                <p class="company">
+                    {{ mentor["company"] }}
+                </p>
+
+
+                <div class="skills">
+
+                    {% for skill in mentor["skills"].split(",") %}
+
+                        <span class="skill">
+                            {{ skill.strip() }}
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="/request-mentor/{{ mentor['id'] }}">
+
+                    <button
+                        type="submit"
+                        class="request-btn">
+
+                        🤝 Request Mentorship
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        {% else %}
+
+            <p>
+                No mentors found. Try another search.
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

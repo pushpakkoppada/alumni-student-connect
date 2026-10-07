@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Requests | AlumniConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        body {
+            background: #f8f7fc;
+        }
+
+        .requests-page {
+            padding: 50px 8%;
+            min-height: 100vh;
+        }
+
+        .request-card {
+            background: white;
+            padding: 25px;
+            margin: 15px 0;
+            border-radius: 16px;
+            border: 1px solid #e5e6ed;
+        }
+
+        .status {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .back {
+            color: #5b35d5;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="requests-page">
+
+    <a href="/student-dashboard" class="back">
+        ← Back to Dashboard
+    </a>
+
+    <br><br>
+
+    <p class="eyebrow">
+        MENTORSHIP
+    </p>
+
+    <h1>My Mentor Requests</h1>
+
+    {% for request in requests %}
+
+        <div class="request-card">
+
+            <h2>
+                {{ request["name"] }}
+            </h2>
+
+            <p>
+                {{ request["company"] }}
+            </p>
+
+            <p>
+                Skills: {{ request["skills"] }}
+            </p>
+
+           {% if request["status"] == "Accepted" %}
+
+    <br><br>
+
+    <a
+        href="/chat/{{ request['alumni_id'] }}"
+        class="primary-btn">
+
+        💬 Open Chat
+
+    </a>
+
+{% endif %}
+
+        </div>
+
+    {% else %}
+
+        <p>
+            You haven't sent any mentorship requests yet.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

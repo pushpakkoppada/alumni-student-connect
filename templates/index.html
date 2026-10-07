@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AlumniConnect | Learn From Those Ahead</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+
+    <div class="logo">
+        <span class="logo-icon">A</span>
+        Alumni<span>Connect</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#mentors">Find Mentors</a>
+        <a href="#careers">Career Paths</a>
+        <a href="#achievements">Achievements</a>
+    </div>
+
+   <a href="/login" class="login-btn">
+    Get Started
+</a>
+
+</nav>
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            🎓 Student–Alumni Mentoring Platform
+        </div>
+
+        <h1>
+            Learn from those who
+            <span>walked the path.</span>
+        </h1>
+
+        <p>
+            Connect with verified alumni, discover career paths,
+            get mentorship and build the skills you need for your future.
+        </p>
+
+        <div class="hero-buttons">
+
+            <button class="primary-btn"
+                    onclick="scrollToMentors()">
+                Find a Mentor →
+            </button>
+
+            <button class="secondary-btn"
+                    onclick="scrollToCareers()">
+                Explore Careers
+            </button>
+
+        </div>
+
+        <div class="stats">
+
+            <div>
+                <strong>500+</strong>
+                <span>Alumni</span>
+            </div>
+
+            <div>
+                <strong>50+</strong>
+                <span>Career Paths</span>
+            </div>
+
+            <div>
+                <strong>1,200+</strong>
+                <span>Students</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-card">
+
+        <div class="card-top">
+            <span class="online-dot"></span>
+            Featured Mentor
+        </div>
+
+        <div class="profile-circle">AS</div>
+
+        <h3>Arjun Sharma</h3>
+
+        <p>AI/ML Engineer · Google</p>
+
+        <div class="skills">
+            <span>Python</span>
+            <span>AI/ML</span>
+            <span>TensorFlow</span>
+        </div>
+
+        <button onclick="connectMentor('Arjun Sharma')">
+            Connect with Mentor
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- MENTORS -->
+<section class="section" id="mentors">
+
+    <div class="section-heading">
+
+        <div>
+            <p class="eyebrow">MENTOR NETWORK</p>
+
+            <h2>Find the right mentor</h2>
+
+            <p>
+                Learn directly from alumni working in companies
+                and roles you're interested in.
+            </p>
+        </div>
+
+        <input
+            type="text"
+            id="mentorSearch"
+            placeholder="🔍 Search mentors, skills..."
+            onkeyup="filterMentors()"
+        >
+
+    </div>
+
+
+    <div class="mentor-grid" id="mentorGrid">
+
+        <div class="mentor-card">
+            <div class="mentor-avatar">AS</div>
+
+            <div class="verified">✓ Verified Alumni</div>
+
+            <h3>Arjun Sharma</h3>
+
+            <p>AI/ML Engineer · Google</p>
+
+            <div class="mentor-skills">
+                <span>Python</span>
+                <span>Machine Learning</span>
+            </div>
+
+            <button onclick="connectMentor('Arjun Sharma')">
+                View Profile
+            </button>
+        </div>
+
+
+        <div class="mentor-card">
+            <div class="mentor-avatar">PR</div>
+
+            <div class="verified">✓ Verified Alumni</div>
+
+            <h3>Priya Reddy</h3>
+
+            <p>Data Scientist · Microsoft</p>
+
+            <div class="mentor-skills">
+                <span>Python</span>
+                <span>SQL</span>
+            </div>
+
+            <button onclick="connectMentor('Priya Reddy')">
+                View Profile
+            </button>
+        </div>
+
+
+        <div class="mentor-card">
+            <div class="mentor-avatar">RM</div>
+
+            <div class="verified">✓ Verified Alumni</div>
+
+            <h3>Rahul Mehta</h3>
+
+            <p>Software Engineer · Amazon</p>
+
+            <div class="mentor-skills">
+                <span>Java</span>
+                <span>DSA</span>
+            </div>
+
+            <button onclick="connectMentor('Rahul Mehta')">
+                View Profile
+            </button>
+        </div>
+
+
+        <div class="mentor-card">
+            <div class="mentor-avatar">SN</div>
+
+            <div class="verified">✓ Verified Alumni</div>
+
+            <h3>Sneha Nair</h3>
+
+            <p>Product Designer · Adobe</p>
+
+            <div class="mentor-skills">
+                <span>UI/UX</span>
+                <span>Figma</span>
+            </div>
+
+            <button onclick="connectMentor('Sneha Nair')">
+                View Profile
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CAREER PATHS -->
+<section class="career-section" id="careers">
+
+    <div class="section-heading centered">
+
+        <p class="eyebrow">CAREER DISCOVERY</p>
+
+        <h2>Explore your career path</h2>
+
+        <p>
+            Understand what skills, roles and learning steps
+            can help you reach your target career.
+        </p>
+
+    </div>
+
+
+    <div class="career-grid">
+
+        <div class="career-card">
+            <div class="career-icon">🤖</div>
+            <h3>AI & Machine Learning</h3>
+            <p>Python → ML → Deep Learning → AI Engineer</p>
+            <button onclick="showCareer('AI & Machine Learning')">
+                Explore Path →
+            </button>
+        </div>
+
+
+        <div class="career-card">
+            <div class="career-icon">📊</div>
+            <h3>Data Science</h3>
+            <p>Python → SQL → Statistics → Data Scientist</p>
+            <button onclick="showCareer('Data Science')">
+                Explore Path →
+            </button>
+        </div>
+
+
+        <div class="career-card">
+            <div class="career-icon">💻</div>
+            <h3>Software Engineering</h3>
+            <p>Programming → DSA → Development → SDE</p>
+            <button onclick="showCareer('Software Engineering')">
+                Explore Path →
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ACHIEVEMENTS -->
+<section class="section" id="achievements">
+
+    <div class="section-heading centered">
+
+        <p class="eyebrow">VERIFIED ACHIEVEMENTS</p>
+
+        <h2>Real journeys. Real achievements.</h2>
+
+        <p>
+            Explore verified alumni achievements and learn from
+            their academic and professional journeys.
+        </p>
+
+    </div>
+
+
+    <div class="achievement-grid">
+
+        <div class="achievement-card">
+            <span>🏆</span>
+            <h3>Google Software Engineer</h3>
+            <p>5+ years of professional experience</p>
+        </div>
+
+        <div class="achievement-card">
+            <span>🚀</span>
+            <h3>Startup Founder</h3>
+            <p>Built and scaled a technology startup</p>
+        </div>
+
+        <div class="achievement-card">
+            <span>🎓</span>
+            <h3>Higher Studies</h3>
+            <p>Alumni pursuing graduate studies abroad</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CTA -->
+<section class="cta">
+
+    <h2>Your career journey starts here.</h2>
+
+    <p>
+        Connect with someone who has already achieved
+        what you're working towards.
+    </p>
+
+    <button onclick="scrollToMentors()">
+        Find Your Mentor →
+    </button>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+
+    <div class="logo">
+        Alumni<span>Connect</span>
+    </div>
+
+    <p>
+        Connecting students with alumni for meaningful mentorship.
+    </p>
+
+    <p class="copyright">
+        © 2026 AlumniConnect. Built for student success.
+    </p>
+
+</footer>
+
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+
+    <div class="popup-box">
+
+        <button class="close" onclick="closePopup()">×</button>
+
+        <h2 id="popupTitle">Connect</h2>
+
+        <p id="popupText"></p>
+
+        <button class="primary-btn" onclick="closePopup()">
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>

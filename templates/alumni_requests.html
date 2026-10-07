@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .requests-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 35px;
+            color: #5b32d6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .page-label {
+            color: #5b32d6;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .page-title {
+            font-size: 42px;
+            margin: 0 0 10px;
+            color: #182238;
+        }
+
+        .page-description {
+            color: #596579;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .request-card {
+            background: white;
+            border: 1px solid #e3e6ef;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .request-info h2 {
+            margin: 0 0 8px;
+            color: #182238;
+            font-size: 25px;
+        }
+
+        .request-info p {
+            margin: 6px 0;
+            color: #657086;
+            font-size: 16px;
+        }
+
+        .request-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 9px 18px;
+            border-radius: 20px;
+            background: #fff3c4;
+            color: #8a6500;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .chat-btn {
+            display: inline-block;
+            background: #5b32d6;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .chat-btn:hover {
+            background: #4824b5;
+            transform: translateY(-1px);
+        }
+
+        .accept,
+        .decline {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .accept {
+            background: #e5f8ec;
+            color: #16803d;
+        }
+
+        .decline {
+            background: #ffe7e7;
+            color: #c62828;
+        }
+
+        .empty-message {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            color: #657086;
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+            .requests-container {
+                padding: 40px 20px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .request-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .request-actions {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="requests-container">
+
+    <a href="/alumni-dashboard" class="back-link">
+        ← Back to Dashboard
+    </a>
+
+    <div class="page-label">Mentorship</div>
+
+    <h1 class="page-title">Student Requests</h1>
+
+    <p class="page-description">
+        Review students who are interested in learning from you.
+    </p>
+
+    {% for request in requests %}
+
+    <div class="request-card">
+
+        <div class="request-info">
+            <h2>{{ request["name"] }}</h2>
+
+            <p>{{ request["course"] }}</p>
+
+            <p>
+                <strong>Skills:</strong>
+                {{ request["skills"] }}
+            </p>
+        </div>
+
+        <div class="request-actions">
+
+            <span class="status">
+                {{ request["status"] }}
+            </span>
+
+            {% if request["status"] == "Pending" %}
+
+            <form method="POST" action="/mentor-request/{{ request['id'] }}/Accepted">
+                <button type="submit" class="accept">
+                    ✓ Accept
+                </button>
+            </form>
+
+            <form method="POST" action="/mentor-request/{{ request['id'] }}/Declined">
+                <button type="submit" class="decline">
+                    ✕ Decline
+                </button>
+            </form>
+
+            {% endif %}
+
+            {% if request["status"] == "Accepted" %}
+
+            <a href="/chat/{{ request['student_id'] }}" class="chat-btn">
+                💬 Open Chat
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-message">
+        No student mentorship requests yet.
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

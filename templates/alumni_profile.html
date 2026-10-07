@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | AlumniConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f7ff;
+            color: #182238;
+        }
+
+        .profile-page {
+            max-width: 1050px;
+            margin: auto;
+            padding: 55px 30px;
+        }
+
+        .back-link {
+            color: #5b35d5;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .header {
+            margin-top: 45px;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            margin: 0 0 12px;
+        }
+
+        .header p {
+            color: #68738a;
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 30px rgba(40, 30, 90, 0.06);
+        }
+
+        .profile-top {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: #eee9ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+        }
+
+        .profile-top h2 {
+            margin: 0 0 8px;
+            font-size: 26px;
+        }
+
+        .profile-top p {
+            margin: 0;
+            color: #737d91;
+        }
+
+        .message {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .success {
+            background: #e8f8ee;
+            color: #19713b;
+        }
+
+        .error {
+            background: #fff0f0;
+            color: #b42318;
+        }
+
+        .view-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .info-box {
+            background: #fafaff;
+            border: 1px solid #e7e5f5;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .info-box.full {
+            grid-column: 1 / -1;
+        }
+
+        .info-label {
+            display: block;
+            color: #747e91;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 17px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .edit-button {
+            margin-top: 30px;
+            border: none;
+            background: #5b35d5;
+            color: white;
+            padding: 15px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .edit-button:hover {
+            background: #4725b8;
+        }
+
+        .edit-form {
+            display: none;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 700;
+            margin-bottom: 9px;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 15px;
+            border: 1px solid #d8dbe5;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #5b35d5;
+            box-shadow: 0 0 0 3px rgba(91, 53, 213, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .save-button {
+            border: none;
+            background: #5b35d5;
+            color: white;
+            padding: 15px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .cancel-button {
+            border: 1px solid #d7d9e3;
+            background: white;
+            color: #343b4d;
+            padding: 15px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        @media (max-width: 700px) {
+            .profile-page {
+                padding: 30px 18px;
+            }
+
+            .profile-card {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .view-section,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-box.full,
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="profile-page">
+
+    <a href="{{ url_for('alumni_dashboard') }}" class="back-link">
+        ← Back to Dashboard
+    </a>
+
+    <div class="header">
+        <h1>👤 My Profile</h1>
+        <p>Manage your professional information, company and skills.</p>
+    </div>
+
+    <div class="profile-card">
+
+        {% if success %}
+            <div class="message success">
+                ✓ {{ success }}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="message error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <div id="profileView">
+
+            <div class="profile-top">
+                <div class="avatar">👨‍💼</div>
+
+                <div>
+                    <h2>{{ user["name"] }}</h2>
+                    <p>@{{ user["username"] }}</p>
+                </div>
+            </div>
+
+            <div class="view-section">
+
+                <div class="info-box">
+                    <span class="info-label">FULL NAME</span>
+                    <div class="info-value">
+                        {{ user["name"] }}
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <span class="info-label">USERNAME</span>
+                    <div class="info-value">
+                        @{{ user["username"] }}
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <span class="info-label">EMAIL</span>
+                    <div class="info-value">
+                        {{ user["email"] }}
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <span class="info-label">COMPANY</span>
+                    <div class="info-value">
+                        {{ user["company"] or "Not added yet" }}
+                    </div>
+                </div>
+
+                <div class="info-box full">
+                    <span class="info-label">SKILLS</span>
+                    <div class="info-value">
+                        {{ user["skills"] or "No skills added yet" }}
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="edit-button" onclick="showEditForm()">
+                ✏️ Edit Profile
+            </button>
+
+        </div>
+
+        <div id="profileEdit" class="edit-form">
+
+            <div class="profile-top">
+                <div class="avatar">👨‍💼</div>
+
+                <div>
+                    <h2>Edit Your Profile</h2>
+                    <p>Update your professional information below.</p>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('alumni_profile') }}">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value="{{ user['name'] }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value="{{ user['username'] }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="{{ user['email'] }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input
+                            type="text"
+                            id="company"
+                            name="company"
+                            value="{{ user['company'] or '' }}"
+                            placeholder="Example: Google"
+                        >
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="skills">Skills</label>
+                        <textarea
+                            id="skills"
+                            name="skills"
+                            placeholder="Example: Python, Machine Learning, SQL, Leadership"
+                        >{{ user['skills'] or '' }}</textarea>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+
+                    <button type="submit" class="save-button">
+                        ✓ Save Changes
+                    </button>
+
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        onclick="hideEditForm()"
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function showEditForm() {
+    document.getElementById("profileView").style.display = "none";
+    document.getElementById("profileEdit").style.display = "block";
+}
+
+function hideEditForm() {
+    document.getElementById("profileEdit").style.display = "none";
+    document.getElementById("profileView").style.display = "block";
+}
+</script>
+
+</body>
+</html>

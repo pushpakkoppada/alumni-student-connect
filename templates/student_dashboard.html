@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | AlumniConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f7ff;
+            color: #182238;
+        }
+
+        .dashboard {
+            max-width: 1280px;
+            margin: auto;
+            padding: 55px 30px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .label {
+            color: #5b35d5;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin: 12px 0 8px;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #667085;
+            margin: 0;
+        }
+
+        .logout {
+            background: #5b35d5;
+            color: white;
+            text-decoration: none;
+            padding: 15px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 32px;
+            min-height: 235px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .icon {
+            font-size: 34px;
+            margin-bottom: 22px;
+        }
+
+        .card h2 {
+            font-size: 21px;
+            margin: 0 0 14px;
+        }
+
+        .card p {
+            color: #707b91;
+            line-height: 1.6;
+            font-size: 16px;
+            margin: 0 0 25px;
+            flex: 1;
+        }
+
+        .button {
+            display: inline-block;
+            width: fit-content;
+            background: #5b35d5;
+            color: white;
+            text-decoration: none;
+            padding: 14px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #4725b8;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 900px) {
+            .cards {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard {
+                padding: 30px 18px;
+            }
+
+            .top {
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <div class="top">
+        <div>
+            <div class="label">STUDENT DASHBOARD</div>
+            <h1>Welcome, {{ session.get('name', 'Student') }} 👋</h1>
+            <p class="subtitle">Build your career with guidance from experienced alumni.</p>
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="icon">🤝</div>
+            <h2>Find a Mentor</h2>
+            <p>Discover alumni based on your career interests and skills.</p>
+            <a href="{{ url_for('mentors') }}" class="button">Find Mentors →</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">🚀</div>
+            <h2>Career Path</h2>
+            <p>Explore skills, roles and learning paths for your target career.</p>
+            <a href="{{ url_for('career_path') }}" class="button">Explore Careers →</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">💬</div>
+            <h2>My Conversations</h2>
+            <p>Connect with mentors and discuss your career goals.</p>
+            <a href="{{ url_for('my_requests') }}" class="button">My Mentor Requests →</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">📚</div>
+            <h2>Learning Progress</h2>
+            <p>Track your skills, projects and learning progress.</p>
+            <a href="{{ url_for('learning_progress') }}" class="button">View Progress</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">🏆</div>
+            <h2>Achievements</h2>
+            <p>View verified alumni achievements and career journeys.</p>
+            <a href="{{ url_for('student_achievements') }}" class="button">Explore</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">👤</div>
+            <h2>My Profile</h2>
+            <p>Update your skills, interests and career goals.</p>
+            <a href="{{ url_for('student_profile') }}" class="button">Edit Profile</a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
