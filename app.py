@@ -3,9 +3,10 @@ from database import get_db, init_db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 import secrets
+import os
 
 app = Flask(__name__)
-app.secret_key = "alumniconnect-secret-key"
+app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
 
 init_db()
 
@@ -166,7 +167,10 @@ def reset_password(token):
             error="Invalid or expired reset link."
         )
 
-    expires_at = datetime.fromisoformat(reset_token["expires_at"])
+    expires_at = reset_token["expires_at"]
+
+    if isinstance(expires_at, str):
+        expires_at = datetime.fromisoformat(expires_at)
 
     if datetime.utcnow() > expires_at:
         conn.close()
