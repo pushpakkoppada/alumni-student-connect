@@ -1,19 +1,49 @@
-import sqlite3
+import os
+import psycopg
+from psycopg.rows import dict_row
+from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash
 
-DATABASE = "database.db"
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL is not set in the .env file")
+
+
+class NeonConnection:
+    def __init__(self):
+        self.conn = psycopg.connect(
+            DATABASE_URL,
+            row_factory=dict_row
+        )
+
+    def execute(self, query, params=None):
+        query = query.replace("?", "%s")
+
+        if params is None:
+            return self.conn.execute(query)
+
+        return self.conn.execute(query, params)
+
+    def commit(self):
+        self.conn.commit()
+
+    def close(self):
+        self.conn.close()
+
 
 def get_db():
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row
-    return conn
+    return NeonConnection()
+
 
 def init_db():
     conn = get_db()
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id BIGSERIAL PRIMARY KEY,
             name TEXT NOT NULL,
             username TEXT UNIQUE,
             email TEXT UNIQUE NOT NULL,
@@ -25,17 +55,11 @@ def init_db():
         )
     """)
 
-    columns = conn.execute("PRAGMA table_info(users)").fetchall()
-    column_names = [column["name"] for column in columns]
-
-    if "username" not in column_names:
-        conn.execute("ALTER TABLE users ADD COLUMN username TEXT")
-
     conn.execute("""
         CREATE TABLE IF NOT EXISTS mentorship_requests (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            student_id INTEGER NOT NULL,
-            alumni_id INTEGER NOT NULL,
+            id BIGSERIAL PRIMARY KEY,
+            student_id BIGINT NOT NULL,
+            alumni_id BIGINT NOT NULL,
             status TEXT DEFAULT 'Pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(student_id) REFERENCES users(id),
@@ -45,9 +69,9 @@ def init_db():
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            sender_id INTEGER NOT NULL,
-            receiver_id INTEGER NOT NULL,
+            id BIGSERIAL PRIMARY KEY,
+            sender_id BIGINT NOT NULL,
+            receiver_id BIGINT NOT NULL,
             message TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(sender_id) REFERENCES users(id),
@@ -57,8 +81,8 @@ def init_db():
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS password_reset_tokens (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
+            id BIGSERIAL PRIMARY KEY,
+            user_id BIGINT NOT NULL,
             token TEXT UNIQUE NOT NULL,
             expires_at TIMESTAMP NOT NULL,
             used INTEGER DEFAULT 0,
@@ -144,6 +168,7 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 if __name__ == "__main__":
     init_db()
-    print("Database initialized successfully!")
+    print("Neon PostgreSQL database initialized successfully!")
